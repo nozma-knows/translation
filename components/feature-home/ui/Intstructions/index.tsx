@@ -5,35 +5,49 @@ interface Props {}
 
 const Instructions: FC<Props> = () => {
   const title = `How it works`;
-  const subtitle = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est.`;
+  const subtitle = `Transform any video to speak your language, with perfectly matched lip movements. `;
 
   const steps = [
     {
-      title: 'Step 1',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est.'
+      title: `Choose Your Video`,
+      description: `Drag and drop your chosen video file into the app, or paste the URL of the video you wish to translate. Our platform supports a variety of formats for your convenience.`
     },
     {
-      title: 'Step 2',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est.'
+      title: `Select Your Language`,
+      description: `Browse through our extensive list of languages and pick the one you need. From common tongues to rare dialects, find the voice of your message.`
     },
     {
-      title: 'Step 3',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est.'
+      title: `Sync and Create`,
+      description: `Hit the 'Create' button and watch the magic happen. Our advanced AI will not only translate the audio but will also sync the speakers' lips to your new audio seamlessly.`
+    },
+    {
+      title: `Download and Share`,
+      description: `Once the video is ready, download it to your device or share it directly from the app. Spread your message far and wide, in any language, with complete lip-sync harmony.`
     }
   ];
 
   return (
     <Flex bg="whiteAlpha.100" rounded="md">
-      <Stack gap="8" px="8" py="16" alignItems={'center'} textColor={'white'}>
-        <h1 className="text-5xl font-bold">{title}</h1>
-        <p className="text-lg">{subtitle}</p>
+      <Stack
+        w="full"
+        gap={8}
+        px="8"
+        py="16"
+        alignItems={'center'}
+        textColor={'white'}
+      >
+        <Stack alignItems={'center'} gap={4}>
+          <Text fontSize="5xl" fontWeight="bold">
+            {title}
+          </Text>
+          <Text fontSize="lg" color="gray.50">
+            {subtitle}
+          </Text>
+        </Stack>
         <Stack w="full" gap={8}>
           {steps.map(({ title, description }, index) => {
             return (
-              <Stack key={title} w="full" px={[0, 0, 8]} gap={8}>
+              <Stack key={title} w="full" px={8} gap={8}>
                 <Flex alignItems={'center'} fontWeight="bold" gap={4}>
                   <Flex
                     w="12"
@@ -47,7 +61,7 @@ const Instructions: FC<Props> = () => {
                   </Flex>
                   <Text fontSize="lg">{title}</Text>
                 </Flex>
-                <Stack px={[0, 0, 16]} gap={8}>
+                <Stack px={16} gap={8}>
                   <Box w="full" h={80} bg="whiteAlpha.200" rounded={'md'} />
                   <Text>{description}</Text>
                 </Stack>
