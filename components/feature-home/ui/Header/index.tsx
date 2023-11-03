@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Button, Flex, Stack } from '@chakra-ui/react';
+import VideoPlayer from '@/components/ui/VideoPlayer';
+import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 
@@ -8,8 +9,8 @@ interface Props {}
 
 const Header: FC<Props> = () => {
   const router = useRouter();
-  const title = `App Name`;
-  const subtitle = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae est.`;
+  const title = `Babel Fish AI`;
+  const subtitle = `Lip-synced Language Translation at Your Fingertips`;
   return (
     <Flex
       gap="8"
@@ -18,23 +19,27 @@ const Header: FC<Props> = () => {
       alignItems={['start', 'start', 'start', 'center']}
       direction={['column', 'column', 'column', 'row']}
     >
-      <Stack textColor={'white'}>
-        <h1 className="text-5xl font-bold">{title}</h1>
-        <p className="text-lg">{subtitle}</p>
+      <Stack textColor={'white'} w="full">
+        <Text fontSize="5xl" fontWeight="bold">
+          {title}
+        </Text>
+        <Text fontSize="lg" color="gray.50">
+          {subtitle}
+        </Text>
         <Flex justifyContent={['center', 'center', 'center', 'start']} pt={4}>
           <Button onClick={() => router.push('/signin')} w="fit">
             Get started today
           </Button>
         </Flex>
       </Stack>
-      <Box
-        w="full"
-        // maxW="6xl"
-        h="full"
-        minH={'80'}
-        bg="whiteAlpha.300"
-        rounded="md"
-      />
+      <Box w="full" h="full" bg="whiteAlpha.300" rounded="md">
+        <VideoPlayer
+          url="https://synchlabs-public.s3.us-west-2.amazonaws.com/david_demo_vid.mp4"
+          preview
+          loop
+          autoPlay
+        />
+      </Box>
     </Flex>
   );
 };
