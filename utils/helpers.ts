@@ -44,3 +44,13 @@ export const toDateTime = (secs: number) => {
   t.setSeconds(secs);
   return t;
 };
+
+export const insertBeforeDot = (url: string, insert: string) => {
+  const dotIndex = url.lastIndexOf('.');
+  if (dotIndex === -1) return url + insert; // If there's no dot, just append the UUID.
+
+  const beginning = url.substring(0, dotIndex);
+  const ending = url.substring(dotIndex);
+
+  return beginning + '-' + insert + ending;
+};
