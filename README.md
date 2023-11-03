@@ -1,5 +1,9 @@
 # [Sync Labs](https://synclabs.so) - Next.js SaaS Starter Project
 
+TODO: Instructions to add:
+- Sync Labs API
+- AWS S3
+
 This is a starter project for quickly releasing Open-Source SaaS projects using:
 
 - [Sync Labs](https://synclabs.so)
