@@ -1,15 +1,12 @@
-import { getSession } from '../supabase-server';
+import { getSession, getJobs } from '../supabase-server';
+import JobGrid from '@/components/feature-playground/ui/JobGrid';
 import MediaInput from '@/components/ui/MediaInput';
 import { Flex, Stack, Text } from '@chakra-ui/react';
 import { redirect } from 'next/navigation';
 
-interface Language {
-  name: string;
-  code: string;
-}
-
 export default async function Playground() {
   const session = await getSession();
+  const jobs = await getJobs(session?.user.id as string);
 
   const title = `Translate any video to any language, with perfectly matched lip movements`;
 
@@ -26,6 +23,7 @@ export default async function Playground() {
         <Flex w="full" justifyContent={'center'}>
           <MediaInput />
         </Flex>
+        {jobs && <JobGrid jobs={jobs} />}
       </Stack>
     </Flex>
   );
