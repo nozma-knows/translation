@@ -1,37 +1,28 @@
-# [Sync Labs](https://synclabs.so) - Next.js SaaS Starter Project
+# Babel Fish AI by [Sync Labs](https://synclabs.so)
+
+Babel Fish AI is an open-source tool for translating spoken language in video content with accurate lip synchronization. It's crafted to help developers integrate multilingual support into video-based apps quickly. The project provides essential APIs and documentation to facilitate the development of applications requiring video translation with lip-sync capabilities.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-saas-starter&repository-name=nextjs-saas-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter%2Ftree%2Fmain)
+
+## How it works
+
+- [Sync Labs](https://synclabs.so) for perfectly synchronized lip movements
+- [Open AI](https://openai.com/)'s [Whisper](https://openai.com/research/whisper) for translation
+- [Eleven Labs](https://elevenlabs.io/) for voice synthesis
+- [Next.js](https://nextjs.org) for web app
+- [Vercel](https://vercel.com) for deployment
+- [Supabase](https://supabase.io) for db and auth
+- [Stripe](https://stripe.com) for billing
+
+Check out a live [demo](https://nextjs-saas-starter-ashy.vercel.app/)
+
+[![Screenshot of demo](./public/demo.png)](https://subscription-payments.vercel.app/)
+
+## Getting set up
 
 TODO: Instructions to add:
 - Sync Labs API
 - AWS S3
-
-This is a starter project for quickly releasing Open-Source SaaS projects using:
-
-- [Sync Labs](https://synclabs.so)
-- [Next.js](https://nextjs.org)
-- [Vercel](https://vercel.com)
-- [Supabase](https://supabase.io)
-- [Stripe](https://stripe.com)
-
-This project is based off of `Vercel's` [nextjs-subscription-payments](https://github.com/vercel/nextjs-subscription-payments) repo
-
-## Features
-
-- User management and authentication with [Supabase](https://supabase.io/docs/guides/auth)
-- Data access & management tooling on top of PostgreSQL with [Supabase](https://supabase.io/docs/guides/database)
-- Integration with [Stripe Checkout](https://stripe.com/docs/payments/checkout) and the [Stripe customer portal](https://stripe.com/docs/billing/subscriptions/customer-portal)
-- Automatic syncing of pricing plans and subscription statuses via [Stripe webhooks](https://stripe.com/docs/webhooks)
-
-## Demo
-
-- https://nextjs-saas-starter-ashy.vercel.app/
-
-[![Screenshot of demo](./public/demo.png)](https://subscription-payments.vercel.app/)
-
-## Architecture
-
-![Architecture diagram](./public/architecture_diagram.svg)
-
-## Step-by-step setup
 
 When deploying this template, the sequence of steps is important. Follow the steps below in order to get up and running.
 
