@@ -3,6 +3,10 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 
+type Metadata = {
+  credits: string;
+};
+
 export const createServerSupabaseClient = cache(() => {
   const cookieStore = cookies();
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
@@ -79,4 +83,45 @@ export async function getJobs(userId: string) {
     console.error('Error:', error);
     return null;
   }
+}
+
+export async function getJobsBetweenDates(
+  userId: string,
+  startDate: string,
+  endDate: string
+) {
+  const supabase = createServerSupabaseClient();
+  try {
+    const { data: jobs } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('created_at', startDate)
+      .lte('created_at', endDate);
+
+    return jobs;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+}
+
+export async function getCreditBalance() {
+  const supabase = createServerSupabaseClient();
+  const subscription = await getSubscription();
+  const metadata: Metadata = subscription?.prices?.products
+    ?.metadata as Metadata;
+  const subscriptionCredits = Number(metadata?.credits);
+  const jobs = await getJobsBetweenDates(
+    subscription?.user_id as string,
+    subscription?.current_period_start as string,
+    subscription?.current_period_end as string
+  );
+  const creditsSpent = jobs
+    ? jobs.reduce((sum, job) => sum + (job.credits || 0), 0)
+    : 0;
+  return {
+    remaining: subscriptionCredits - creditsSpent,
+    outOf: subscriptionCredits
+  };
 }
