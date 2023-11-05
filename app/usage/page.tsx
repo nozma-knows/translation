@@ -1,5 +1,6 @@
 import { getSession, getJobs } from '../supabase-server';
 import StatusTag from '@/components/ui/StatusTag';
+import { Database } from '@/types_db';
 import {
   Flex,
   Stack,
@@ -15,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { redirect } from 'next/navigation';
-import { FaCheck } from 'react-icons/fa';
-import { FaX } from 'react-icons/fa6';
+
+type Job = Database['public']['Tables']['jobs']['Row'];
 
 export default async function Usage() {
   const session = await getSession();
@@ -48,7 +49,7 @@ export default async function Usage() {
               </Tr>
             </Thead>
             <Tbody>
-              {jobs?.map((job) => {
+              {jobs?.map((job: Job) => {
                 const createdAt = DateTime.fromJSDate(
                   new Date(job.created_at)
                 ).toFormat("MMM. d, yyyy 'at' h:mm a");

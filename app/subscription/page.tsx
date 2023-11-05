@@ -3,7 +3,7 @@ import {
   getSession,
   getActiveProductsWithPrices,
   getSubscription,
-  grabCreditBalance
+  getCreditBalance
 } from '@/app/supabase-server';
 import Pricing from '@/components/ui/Pricing';
 import {
@@ -111,7 +111,7 @@ export default async function Subscription() {
     getSession(),
     getActiveProductsWithPrices(),
     getSubscription(),
-    grabCreditBalance()
+    getCreditBalance()
   ]);
 
   if (!session) {
