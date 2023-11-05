@@ -2,7 +2,8 @@ import ManageSubscriptionButton from './ManageSubscriptionButton';
 import {
   getSession,
   getActiveProductsWithPrices,
-  getSubscription
+  getSubscription,
+  grabCreditBalance
 } from '@/app/supabase-server';
 import Pricing from '@/components/ui/Pricing';
 import {
@@ -106,19 +107,16 @@ function Details({
 }
 
 export default async function Subscription() {
-  const [session, products, subscription] = await Promise.all([
+  const [session, products, subscription, creditBalance] = await Promise.all([
     getSession(),
     getActiveProductsWithPrices(),
-    getSubscription()
+    getSubscription(),
+    grabCreditBalance()
   ]);
 
   if (!session) {
     return redirect('/signin');
   }
-
-  const metadata: Metadata = subscription?.prices?.products
-    ?.metadata as Metadata;
-  const credits = metadata ? Number((metadata.credits as string) || 0) : 0;
 
   const periodEnd = DateTime.fromISO(subscription?.current_period_end || '');
   const subscriptionDetails = subscription
@@ -132,8 +130,8 @@ export default async function Subscription() {
         daysUntilRenewal: Math.ceil(
           periodEnd.diff(DateTime.now(), 'days').days
         ),
-        balance: credits,
-        outOf: credits
+        balance: creditBalance.remaining,
+        outOf: creditBalance.outOf
       }
     : null;
 
