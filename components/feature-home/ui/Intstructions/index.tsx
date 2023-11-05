@@ -1,4 +1,8 @@
+import SelectLanguage from '@/assets/Instructions/select-language.png';
+import SelectVideo from '@/assets/Instructions/select-video.png';
+import Submit from '@/assets/Instructions/submit.png';
 import { Box, Flex, Stack, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 import { FC } from 'react';
 
 interface Props {}
@@ -10,15 +14,18 @@ const Instructions: FC<Props> = () => {
   const steps = [
     {
       title: `Choose Your Video`,
-      description: `Drag and drop your chosen video file into the app, or paste the URL of the video you wish to translate. Our platform supports a variety of formats for your convenience.`
+      description: `Drag and drop your chosen video file into the app, or paste the URL of the video you wish to translate. Our platform supports a variety of formats for your convenience.`,
+      img: SelectVideo
     },
     {
       title: `Select Your Language`,
-      description: `Browse through our extensive list of languages and pick the one you need. From common tongues to rare dialects, find the voice of your message.`
+      description: `Browse through our extensive list of languages and pick the one you need. From common tongues to rare dialects, find the voice of your message.`,
+      img: SelectLanguage
     },
     {
       title: `Sync and Create`,
-      description: `Hit the 'Create' button and watch the magic happen. Our advanced AI will not only translate the audio but will also sync the speakers' lips to your new audio seamlessly.`
+      description: `Hit the 'Create' button and watch the magic happen. Our advanced AI will not only translate the audio but will also sync the speakers' lips to your new audio seamlessly.`,
+      img: Submit
     },
     {
       title: `Download and Share`,
@@ -45,7 +52,7 @@ const Instructions: FC<Props> = () => {
           </Text>
         </Stack>
         <Stack w="full" gap={8}>
-          {steps.map(({ title, description }, index) => {
+          {steps.map(({ title, description, img }, index) => {
             return (
               <Stack key={title} w="full" px={8} gap={8}>
                 <Flex alignItems={'center'} fontWeight="bold" gap={4}>
@@ -61,8 +68,18 @@ const Instructions: FC<Props> = () => {
                   </Flex>
                   <Text fontSize="lg">{title}</Text>
                 </Flex>
-                <Stack px={16} gap={8}>
-                  <Box w="full" h={80} bg="whiteAlpha.200" rounded={'md'} />
+                <Stack px={[0, 0, 0, 16]} gap={8} w="full">
+                  {img && (
+                    <Flex w="full" h={96} position="relative">
+                      <Image
+                        src={img}
+                        alt={title}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </Flex>
+                  )}
+
                   <Text>{description}</Text>
                 </Stack>
               </Stack>
