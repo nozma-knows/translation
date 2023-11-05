@@ -29,7 +29,7 @@ export default async function SignIn() {
                 src={logo}
                 alt={'Synchronicity Labs Logo'}
                 fill
-                objectFit="contain"
+                style={{ objectFit: 'contain' }}
               />
             </Box>
           </Link>
