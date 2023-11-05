@@ -1,4 +1,4 @@
-// VideoPlayer.js
+'use client';
 
 // import { Flex } from "@chakra-ui/react";
 import { Box, AspectRatio, Flex } from '@chakra-ui/react';
@@ -9,13 +9,15 @@ interface Props {
   url: string;
   width?: string;
   preview?: boolean;
+  overlay?: boolean;
   loop?: boolean;
-  autoPlay: boolean;
+  autoPlay?: boolean;
 }
 const VideoPlayer: FC<Props> = ({
   url,
   width,
   preview = false,
+  overlay = false,
   loop = false,
   autoPlay = false
 }) => {
@@ -62,7 +64,7 @@ const VideoPlayer: FC<Props> = ({
             <source src={url} type="video/mp4" />
           </video>
         </AspectRatio>
-        {preview && hovering && (
+        {overlay && hovering && (
           <Flex
             w="full"
             h="full"

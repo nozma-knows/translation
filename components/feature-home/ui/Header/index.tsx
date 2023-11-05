@@ -36,6 +36,7 @@ const Header: FC<Props> = () => {
         <VideoPlayer
           url="https://synchlabs-public.s3.us-west-2.amazonaws.com/david_demo_vid.mp4"
           preview
+          overlay
           loop
           autoPlay
         />
