@@ -6,7 +6,7 @@ import Selector from '../Selector';
 import Requirements from './Requirements';
 import UrlInput from './UrlInput';
 import { insertBeforeDot } from '@/utils/helpers';
-import { Button, Flex, Select, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Select, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { S3 } from 'aws-sdk';
 import { useCallback, useState } from 'react';
 import { HiSparkles } from 'react-icons/hi';
@@ -23,6 +23,7 @@ export default function MediaInput() {
   const [language, setLanguage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const submitDisabled = !url || !language;
   const inputOptions = ['upload', 'url'];
 
   // Initalize input type
@@ -149,7 +150,7 @@ export default function MediaInput() {
             )}
           </Flex>
           <Select
-            placeholder="Select option"
+            placeholder="Select target language"
             onChange={(e) => setLanguage(e.target.value)}
             value={language || ''}
           >
@@ -161,17 +162,26 @@ export default function MediaInput() {
               );
             })}
           </Select>
-          <Flex justifyContent="center">
-            <Button
-              type="submit"
-              isLoading={loading}
-              loadingText="submitting"
-              isDisabled={!url || !language}
-              leftIcon={<HiSparkles />}
-            >
-              submit
-            </Button>
-          </Flex>
+          <Tooltip
+            hasArrow
+            label={
+              submitDisabled
+                ? 'Need to add a video file and select a language to continue.'
+                : ''
+            }
+          >
+            <Flex justifyContent="center">
+              <Button
+                type="submit"
+                isLoading={loading}
+                loadingText="submitting"
+                isDisabled={submitDisabled}
+                leftIcon={<HiSparkles />}
+              >
+                submit
+              </Button>
+            </Flex>
+          </Tooltip>
         </Stack>
       </form>
     </Flex>
