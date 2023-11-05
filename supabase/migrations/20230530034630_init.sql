@@ -1,145 +1,106 @@
-/** 
-* USERS
-* Note: This table contains user data. Users should only be able to view and update their own data.
-*/
-create table users (
-  -- UUID from auth.users
-  id uuid references auth.users not null primary key,
-  full_name text,
-  avatar_url text,
-  -- The customer's billing address, stored in JSON format.
-  billing_address jsonb,
-  -- Stores your customer's payment instruments.
-  payment_method jsonb
+-- Migration script for Supabase schema including 'jobs' table
+
+-- Users table
+CREATE TABLE users (
+  id UUID REFERENCES auth.users NOT NULL PRIMARY KEY,
+  full_name TEXT,
+  avatar_url TEXT,
+  billing_address JSONB,
+  payment_method JSONB
 );
-alter table users enable row level security;
-create policy "Can view own user data." on users for select using (auth.uid() = id);
-create policy "Can update own user data." on users for update using (auth.uid() = id);
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Can view own user data." ON users FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Can update own user data." ON users FOR UPDATE USING (auth.uid() = id);
 
-/**
-* This trigger automatically creates a user entry when a new user signs up via Supabase Auth.
-*/ 
-create function public.handle_new_user() 
-returns trigger as $$
-begin
-  insert into public.users (id, full_name, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  return new;
-end;
-$$ language plpgsql security definer;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+-- Handle new user trigger
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.users (id, full_name, avatar_url)
+  VALUES (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-/**
-* CUSTOMERS
-* Note: this is a private table that contains a mapping of user IDs to Stripe customer IDs.
-*/
-create table customers (
-  -- UUID from auth.users
-  id uuid references auth.users not null primary key,
-  -- The user's customer ID in Stripe. User must not be able to update this.
-  stripe_customer_id text
+-- Customers table
+CREATE TABLE customers (
+  id UUID REFERENCES auth.users NOT NULL PRIMARY KEY,
+  stripe_customer_id TEXT
 );
-alter table customers enable row level security;
--- No policies as this is a private table that the user must not have access to.
+ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 
-/** 
-* PRODUCTS
-* Note: products are created and managed in Stripe and synced to our DB via Stripe webhooks.
-*/
-create table products (
-  -- Product ID from Stripe, e.g. prod_1234.
-  id text primary key,
-  -- Whether the product is currently available for purchase.
-  active boolean,
-  -- The product's name, meant to be displayable to the customer. Whenever this product is sold via a subscription, name will show up on associated invoice line item descriptions.
-  name text,
-  -- The product's description, meant to be displayable to the customer. Use this field to optionally store a long form explanation of the product being sold for your own rendering purposes.
-  description text,
-  -- A URL of the product image in Stripe, meant to be displayable to the customer.
-  image text,
-  -- Set of key-value pairs, used to store additional information about the object in a structured format.
-  metadata jsonb
+-- Products table
+CREATE TABLE products (
+  id TEXT PRIMARY KEY,
+  active BOOLEAN,
+  name TEXT,
+  description TEXT,
+  image TEXT,
+  metadata JSONB
 );
-alter table products enable row level security;
-create policy "Allow public read-only access." on products for select using (true);
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public read-only access." ON products FOR SELECT USING (TRUE);
 
-/**
-* PRICES
-* Note: prices are created and managed in Stripe and synced to our DB via Stripe webhooks.
-*/
-create type pricing_type as enum ('one_time', 'recurring');
-create type pricing_plan_interval as enum ('day', 'week', 'month', 'year');
-create table prices (
-  -- Price ID from Stripe, e.g. price_1234.
-  id text primary key,
-  -- The ID of the prduct that this price belongs to.
-  product_id text references products, 
-  -- Whether the price can be used for new purchases.
-  active boolean,
-  -- A brief description of the price.
-  description text,
-  -- The unit amount as a positive integer in the smallest currency unit (e.g., 100 cents for US$1.00 or 100 for ¥100, a zero-decimal currency).
-  unit_amount bigint,
-  -- Three-letter ISO currency code, in lowercase.
-  currency text check (char_length(currency) = 3),
-  -- One of `one_time` or `recurring` depending on whether the price is for a one-time purchase or a recurring (subscription) purchase.
+-- Prices table and related types
+CREATE TYPE pricing_type AS ENUM ('one_time', 'recurring');
+CREATE TYPE pricing_plan_interval AS ENUM ('day', 'week', 'month', 'year');
+CREATE TABLE prices (
+  id TEXT PRIMARY KEY,
+  product_id TEXT REFERENCES products,
+  active BOOLEAN,
+  description TEXT,
+  unit_amount BIGINT,
+  currency TEXT CHECK (char_length(currency) = 3),
   type pricing_type,
-  -- The frequency at which a subscription is billed. One of `day`, `week`, `month` or `year`.
   interval pricing_plan_interval,
-  -- The number of intervals (specified in the `interval` attribute) between subscription billings. For example, `interval=month` and `interval_count=3` bills every 3 months.
-  interval_count integer,
-  -- Default number of trial days when subscribing a customer to this price using [`trial_from_plan=true`](https://stripe.com/docs/api#create_subscription-trial_from_plan).
-  trial_period_days integer,
-  -- Set of key-value pairs, used to store additional information about the object in a structured format.
-  metadata jsonb
+  interval_count INTEGER,
+  trial_period_days INTEGER,
+  metadata JSONB
 );
-alter table prices enable row level security;
-create policy "Allow public read-only access." on prices for select using (true);
+ALTER TABLE prices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public read-only access." ON prices FOR SELECT USING (TRUE);
 
-/**
-* SUBSCRIPTIONS
-* Note: subscriptions are created and managed in Stripe and synced to our DB via Stripe webhooks.
-*/
-create type subscription_status as enum ('trialing', 'active', 'canceled', 'incomplete', 'incomplete_expired', 'past_due', 'unpaid', 'paused');
-create table subscriptions (
-  -- Subscription ID from Stripe, e.g. sub_1234.
-  id text primary key,
-  user_id uuid references auth.users not null,
-  -- The status of the subscription object, one of subscription_status type above.
+-- Subscriptions table and related types
+CREATE TYPE subscription_status AS ENUM ('trialing', 'active', 'canceled', 'incomplete', 'incomplete_expired', 'past_due', 'unpaid', 'paused');
+CREATE TABLE subscriptions (
+  id TEXT PRIMARY KEY,
+  user_id UUID REFERENCES auth.users NOT NULL,
   status subscription_status,
-  -- Set of key-value pairs, used to store additional information about the object in a structured format.
-  metadata jsonb,
-  -- ID of the price that created this subscription.
-  price_id text references prices,
-  -- Quantity multiplied by the unit amount of the price creates the amount of the subscription. Can be used to charge multiple seats.
-  quantity integer,
-  -- If true the subscription has been canceled by the user and will be deleted at the end of the billing period.
-  cancel_at_period_end boolean,
-  -- Time at which the subscription was created.
-  created timestamp with time zone default timezone('utc'::text, now()) not null,
-  -- Start of the current period that the subscription has been invoiced for.
-  current_period_start timestamp with time zone default timezone('utc'::text, now()) not null,
-  -- End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created.
-  current_period_end timestamp with time zone default timezone('utc'::text, now()) not null,
-  -- If the subscription has ended, the timestamp of the date the subscription ended.
-  ended_at timestamp with time zone default timezone('utc'::text, now()),
-  -- A date in the future at which the subscription will automatically get canceled.
-  cancel_at timestamp with time zone default timezone('utc'::text, now()),
-  -- If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with `cancel_at_period_end`, `canceled_at` will still reflect the date of the initial cancellation request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
-  canceled_at timestamp with time zone default timezone('utc'::text, now()),
-  -- If the subscription has a trial, the beginning of that trial.
-  trial_start timestamp with time zone default timezone('utc'::text, now()),
-  -- If the subscription has a trial, the end of that trial.
-  trial_end timestamp with time zone default timezone('utc'::text, now())
+  metadata JSONB,
+  price_id TEXT REFERENCES prices,
+  quantity INTEGER,
+  cancel_at_period_end BOOLEAN,
+  created TIMESTAMPTZ DEFAULT timezone('utc', now()) NOT NULL,
+  current_period_start TIMESTAMPTZ DEFAULT timezone('utc', now()) NOT NULL,
+  current_period_end TIMESTAMPTZ DEFAULT timezone('utc', now()) NOT NULL,
+  ended_at TIMESTAMPTZ DEFAULT timezone('utc', now()),
+  cancel_at TIMESTAMPTZ DEFAULT timezone('utc', now()),
+  canceled_at TIMESTAMPTZ DEFAULT timezone('utc', now()),
+  trial_start TIMESTAMPTZ DEFAULT timezone('utc', now()),
+  trial_end TIMESTAMPTZ DEFAULT timezone('utc', now())
 );
-alter table subscriptions enable row level security;
-create policy "Can only view own subs data." on subscriptions for select using (auth.uid() = user_id);
+ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Can only view own subs data." ON subscriptions FOR SELECT USING (auth.uid() = user_id);
 
-/**
- * REALTIME SUBSCRIPTIONS
- * Only allow realtime listening on public tables.
- */
-drop publication if exists supabase_realtime;
-create publication supabase_realtime for table products, prices;
+-- Jobs table
+CREATE TABLE jobs (
+  id UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT timezone('utc', now()) NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT timezone('utc', now()) NOT NULL,
+  status TEXT,
+  video_url TEXT,
+  original_video_url TEXT,
+  user_id UUID REFERENCES users(id) NOT NULL,
+  is_deleted BOOLEAN DEFAULT FALSE,
+  credits INT
+);
+ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Can view own jobs data." ON jobs FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Can update own jobs data." ON jobs FOR UPDATE USING (auth.uid() = user_id);
+
+-- Realtime subscriptions
+DROP PUBLICATION IF EXISTS supabase_realtime;
+CREATE PUBLICATION supabase_realtime FOR TABLE products, prices;
