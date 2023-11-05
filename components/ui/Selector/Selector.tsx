@@ -13,11 +13,11 @@ const Option = ({
   return (
     <Flex
       bg={selected ? 'blackAlpha.600' : ''}
-      border="2px solid transparent"
       _hover={{
-        borderColor: !selected ? 'blackAlpha.600' : ''
+        bg: !selected ? 'whiteAlpha.600' : '',
+        color: !selected ? 'black' : ''
       }}
-      p={1}
+      p={2}
       rounded={'md'}
       w="full"
       justifyContent={'center'}
