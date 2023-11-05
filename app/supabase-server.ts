@@ -66,3 +66,17 @@ export const getActiveProductsWithPrices = async () => {
   }
   return data ?? [];
 };
+
+export async function getJobs(userId: string) {
+  const supabase = createServerSupabaseClient();
+  try {
+    const { data: jobs } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('user_id', userId);
+    return jobs;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+}
