@@ -2,7 +2,8 @@
 
 Babel Fish AI is an open-source tool for translating spoken language in video content with accurate lip synchronization. It's crafted to help developers integrate multilingual support into video-based apps quickly. The project provides essential APIs and documentation to facilitate the development of applications requiring video translation with lip-sync capabilities.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-saas-starter&repository-name=nextjs-saas-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter%2Ftree%2Fmain)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=translation-starter&repository-name=translation-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%2Ftree%2Fmain)
+
 
 ## How it works
 
@@ -30,7 +31,7 @@ When deploying this template, the sequence of steps is important. Follow the ste
 
 #### Vercel Deploy Button
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-saas-starter&repository-name=nextjs-saas-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Fnextjs-saas-starter%2Ftree%2Fmain)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=translation-starter&repository-name=translation-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%2Ftree%2Fmain)
 
 The Vercel Deployment will create a new repository with this template on your GitHub account and guide you through the creation of a new Supabase project. The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase-v2) will set up the necessary Supabase environment variables and run the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to set up the Database schema on your account. You can inspect the created tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
 
