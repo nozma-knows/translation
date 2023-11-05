@@ -15,7 +15,7 @@ Babel Fish AI is an open-source tool for translating spoken language in video co
 - [Supabase](https://supabase.io) for db and auth
 - [Stripe](https://stripe.com) for billing
 
-Check out a live [demo](https://nextjs-saas-starter-ashy.vercel.app/)
+Check out a live [demo](https://translation-phi.vercel.app/)
 
 [![Screenshot of demo](./public/demo.png)](https://subscription-payments.vercel.app/)
 
