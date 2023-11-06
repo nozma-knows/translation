@@ -93,7 +93,7 @@ CREATE TABLE jobs (
   status TEXT,
   video_url TEXT,
   original_video_url TEXT,
-  user_id UUID REFERENCES users(id) NOT NULL,
+  user_id UUID REFERENCES auth.users NOT NULL,
   is_deleted BOOLEAN DEFAULT FALSE,
   credits INT
 );
