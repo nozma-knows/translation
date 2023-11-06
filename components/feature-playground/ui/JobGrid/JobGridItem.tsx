@@ -3,12 +3,10 @@
 import JobGridItemExpandedModal from './JobGridItemExpandedModal';
 import StatusTag from '@/components/ui/StatusTag';
 import VideoPlayer from '@/components/ui/VideoPlayer';
-import { Database } from '@/types_db';
+import { Job } from '@/types_db';
 import { GridItem, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { FC, useState } from 'react';
-
-type Job = Database['public']['Tables']['jobs']['Row'];
 
 interface Props {
   job: Job;

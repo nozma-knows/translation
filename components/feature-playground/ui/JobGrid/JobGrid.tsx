@@ -1,9 +1,7 @@
 import JobGridItem from './JobGridItem';
-import { Database } from '@/types_db';
+import { Job } from '@/types_db';
 import { Flex, Grid } from '@chakra-ui/react';
 import { FC } from 'react';
-
-type Job = Database['public']['Tables']['jobs']['Row'];
 
 interface Props {
   jobs: Job[];

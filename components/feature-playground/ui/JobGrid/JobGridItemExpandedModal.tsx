@@ -1,5 +1,5 @@
 import VideoPlayer from '@/components/ui/VideoPlayer';
-import { Database } from '@/types_db';
+import { Database, Job } from '@/types_db';
 import {
   Modal,
   ModalContent,
@@ -19,8 +19,6 @@ import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { BsTranslate } from 'react-icons/bs';
 import { FaTrash, FaVideo } from 'react-icons/fa';
-
-type Job = Database['public']['Tables']['jobs']['Row'];
 
 interface Props {
   job: Job;

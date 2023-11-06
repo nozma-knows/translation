@@ -1,6 +1,6 @@
 import { getSession, getJobs } from '../supabase-server';
 import StatusTag from '@/components/ui/StatusTag';
-import { Database } from '@/types_db';
+import { Database, Job } from '@/types_db';
 import {
   Flex,
   Stack,
@@ -16,8 +16,6 @@ import {
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { redirect } from 'next/navigation';
-
-type Job = Database['public']['Tables']['jobs']['Row'];
 
 export default async function Usage() {
   const session = await getSession();

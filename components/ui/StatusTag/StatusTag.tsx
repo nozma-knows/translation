@@ -1,9 +1,6 @@
-import { Database } from '@/types_db';
+import { Database, Status } from '@/types_db';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { FC } from 'react';
-
-// type Job = Database['public']['Tables']['jobs']['Row'];
-type Status = Database['public']['Enums']['status'];
 
 interface Props {
   status: Status;
