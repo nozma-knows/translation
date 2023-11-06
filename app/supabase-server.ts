@@ -107,21 +107,33 @@ export async function getJobsBetweenDates(
 }
 
 export async function getCreditBalance() {
-  const supabase = createServerSupabaseClient();
+  const user = await getUserDetails();
   const subscription = await getSubscription();
-  const metadata: Metadata = subscription?.prices?.products
-    ?.metadata as Metadata;
-  const subscriptionCredits = Number(metadata?.credits);
-  const jobs = await getJobsBetweenDates(
-    subscription?.user_id as string,
-    subscription?.current_period_start as string,
-    subscription?.current_period_end as string
-  );
+  if (subscription) {
+    const metadata: Metadata = subscription?.prices?.products
+      ?.metadata as Metadata;
+    const subscriptionCredits = Number(metadata?.credits);
+    const jobs = await getJobsBetweenDates(
+      subscription?.user_id as string,
+      subscription?.current_period_start as string,
+      subscription?.current_period_end as string
+    );
+    const creditsSpent = jobs
+      ? jobs.reduce((sum, job) => sum + (job.credits || 0), 0)
+      : 0;
+    return {
+      remaining: subscriptionCredits - creditsSpent,
+      outOf: subscriptionCredits
+    };
+  }
+
+  const credits = 600;
+  const jobs = await getJobs(user?.id as string);
   const creditsSpent = jobs
     ? jobs.reduce((sum, job) => sum + (job.credits || 0), 0)
     : 0;
   return {
-    remaining: subscriptionCredits - creditsSpent,
-    outOf: subscriptionCredits
+    remaining: credits - creditsSpent,
+    outOf: credits
   };
 }

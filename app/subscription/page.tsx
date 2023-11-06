@@ -33,7 +33,7 @@ function Details({
   plan: string;
   balance: number;
   outOf: number;
-  daysUntilRenewal: number;
+  daysUntilRenewal: number | null;
 }) {
   const creditsUsed = outOf - balance;
   return (
@@ -89,19 +89,25 @@ function Details({
           </Flex>
         )}
       </Flex>
-      <Divider />
-      <Flex>
-        <Flex w="full" fontSize={'lg'} alignItems="center">
-          next billing period starts in
-        </Flex>
-        <Flex w="full">
-          <Text fontSize="lg">
-            {daysUntilRenewal !== 0
-              ? `${daysUntilRenewal} days`
-              : `Billing Today`}
-          </Text>
-        </Flex>
-      </Flex>
+
+      {daysUntilRenewal && (
+        <>
+          <Divider />
+          <Flex>
+            <Flex w="full" fontSize={'lg'} alignItems="center">
+              next billing period starts in
+            </Flex>
+
+            <Flex w="full">
+              <Text fontSize="lg">
+                {daysUntilRenewal !== 0
+                  ? `${daysUntilRenewal} days`
+                  : `Billing Today`}
+              </Text>
+            </Flex>
+          </Flex>
+        </>
+      )}
     </Stack>
   );
 }
@@ -119,21 +125,19 @@ export default async function Subscription() {
   }
 
   const periodEnd = DateTime.fromISO(subscription?.current_period_end || '');
-  const subscriptionDetails = subscription
-    ? {
-        plan: subscription?.prices?.products?.name,
-        price: new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: subscription?.prices?.currency!,
-          minimumFractionDigits: 0
-        }).format((subscription?.prices?.unit_amount || 0) / 100),
-        daysUntilRenewal: Math.ceil(
-          periodEnd.diff(DateTime.now(), 'days').days
-        ),
-        balance: creditBalance.remaining,
-        outOf: creditBalance.outOf
-      }
-    : null;
+  const subscriptionDetails = {
+    plan: subscription?.prices?.products?.name || 'free',
+    price: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: subscription?.prices?.currency! || 'USD',
+      minimumFractionDigits: 0
+    }).format((subscription?.prices?.unit_amount || 0) / 100),
+    daysUntilRenewal: subscription
+      ? Math.ceil(periodEnd.diff(DateTime.now(), 'days').days)
+      : null,
+    balance: creditBalance.remaining,
+    outOf: creditBalance.outOf
+  };
 
   return (
     <Flex w="full" px={4} justifyContent={'center'} color="white">
