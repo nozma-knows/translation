@@ -2,13 +2,23 @@
 
 import FileDrop from '../FileDrop';
 import Info from '../Info';
+import { SignUpModal } from '../Modals';
 import Selector from '../Selector';
 import Requirements from './Requirements';
 import UrlInput from './UrlInput';
 import { insertBeforeDot } from '@/utils/helpers';
-import { Button, Flex, Select, Stack, Text, Tooltip } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Select,
+  Stack,
+  Text,
+  Tooltip,
+  useDisclosure
+} from '@chakra-ui/react';
+import { Session } from '@supabase/auth-helpers-nextjs';
 import { S3 } from 'aws-sdk';
-import { useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { HiSparkles } from 'react-icons/hi';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,11 +27,16 @@ interface Language {
   code: string;
 }
 
-export default function MediaInput() {
+interface Props {
+  session: Session | null;
+}
+
+const MediaInput: FC<Props> = ({ session }) => {
   const [video, setVideo] = useState<File | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [language, setLanguage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const submitDisabled = !url || !language;
   const inputOptions = ['upload', 'url'];
@@ -65,10 +80,17 @@ export default function MediaInput() {
     { name: 'Turkish', code: 'tr' }
   ];
 
+  // Close sign up modal if user is signed in
+  useEffect(() => {
+    if (session && isOpen) {
+      onClose();
+    }
+  }, [session]);
+
   // Uploads file to S3 and calls '/api/translate' endpoint
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (session) {
       setLoading(true);
       if (video) {
         // Initialize S3 instance
@@ -89,7 +111,6 @@ export default function MediaInput() {
         const uploadPromise = s3.upload(params);
         const upload = await uploadPromise.promise();
         const url = upload.Location;
-        console.log('url: ', url);
         // const response = await fetch('/api/translate', {
         //   method: 'POST',
         //   body: JSON.stringify({ videoUrl: url, language })
@@ -106,9 +127,10 @@ export default function MediaInput() {
       setVideo(null);
       setUrl(null);
       setLanguage(null);
-    },
-    [language, video]
-  );
+    } else {
+      onOpen();
+    }
+  };
 
   // Function for updating video state when file is added
   const handleAddFile = useCallback((e: File[]) => {
@@ -184,6 +206,9 @@ export default function MediaInput() {
           </Tooltip>
         </Stack>
       </form>
+      <SignUpModal isOpen={isOpen} onClose={onClose} />
     </Flex>
   );
-}
+};
+
+export default MediaInput;
