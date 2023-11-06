@@ -11,7 +11,7 @@ const Info: FC<Props> = ({ label, info }) => (
   <Flex w="full" justifyContent="center">
     <Tooltip hasArrow label={info}>
       <Flex gap={1} fontSize="xs" alignItems={'center'} cursor={'pointer'}>
-        <Box p={1} bg="blackAlpha.600" rounded="sm">
+        <Box p={1} bg="whiteAlpha.600" rounded="sm">
           <FaInfo />
         </Box>
         <Text>{label}</Text>
