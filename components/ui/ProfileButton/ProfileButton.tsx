@@ -16,13 +16,7 @@ import {
 import { User } from '@supabase/auth-helpers-nextjs';
 import { useRouter, usePathname } from 'next/navigation';
 import { FC } from 'react';
-import {
-  FaDollarSign,
-  FaChartBar,
-  FaSlack,
-  FaBook,
-  FaRegWindowMaximize
-} from 'react-icons/fa';
+import { FaDollarSign, FaChartBar, FaSlack, FaBook } from 'react-icons/fa';
 import { MdPerson } from 'react-icons/md';
 
 interface Props {
@@ -43,13 +37,6 @@ const tabs: any[] = [
     route: '/usage',
     showOnMobile: true,
     showOnWeb: true
-  },
-  {
-    label: 'Playground',
-    icon: <FaRegWindowMaximize />,
-    route: '/playground',
-    showOnMobile: true,
-    showOnWeb: false
   },
   {
     label: 'Docs',

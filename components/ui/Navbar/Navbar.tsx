@@ -5,14 +5,9 @@ import logo from '@/assets/logo.png';
 import { Box, Flex } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaBook, FaRegWindowMaximize, FaSlack } from 'react-icons/fa';
+import { FaBook, FaSlack } from 'react-icons/fa';
 
 const pages = [
-  {
-    label: 'Playground',
-    icon: <FaRegWindowMaximize />,
-    route: '/playground'
-  },
   {
     label: 'Docs',
     icon: <FaBook />,
