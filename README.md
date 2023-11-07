@@ -1,6 +1,6 @@
-# Babel Fish AI by [Sync Labs](https://synclabs.so)
+# Translation AI by [Sync Labs](https://synclabs.so)
 
-Babel Fish AI is an open-source tool for translating spoken language in video content with accurate lip synchronization. It's crafted to help developers integrate multilingual support into video-based apps quickly. The project provides essential APIs and documentation to facilitate the development of applications requiring video translation with lip-sync capabilities.
+Translation AI is an open-source tool for translating spoken language in video content with accurate lip synchronization. The purpose of this repo is to help developers quickly integrate multilingual support into video-based apps. This project provides essential APIs and documentation to facilitate the development of applications requiring video translation with lip-sync capabilities.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=translation-starter&repository-name=translation-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%2Ftree%2Fmain)
 
@@ -10,156 +10,154 @@ Babel Fish AI is an open-source tool for translating spoken language in video co
 - [Sync Labs](https://synclabs.so) for perfectly synchronized lip movements
 - [Open AI](https://openai.com/)'s [Whisper](https://openai.com/research/whisper) for translation
 - [Eleven Labs](https://elevenlabs.io/) for voice synthesis
+- [AWS](https://aws.amazon.com/) S3 for file hosting
 - [Next.js](https://nextjs.org) for web app
 - [Vercel](https://vercel.com) for deployment
 - [Supabase](https://supabase.io) for db and auth
 - [Stripe](https://stripe.com) for billing
 
-Check out a live [demo](https://translation-phi.vercel.app/)
 
-[![Screenshot of demo](./public/demo.png)](https://subscription-payments.vercel.app/)
+### [Live demo](https://translation-phi.vercel.app/)
+
+[![Screenshot of demo](./public/demo.png)](https://translation-phi.vercel.app/)
 
 ## Getting set up
 
-TODO: Instructions to add:
-- Sync Labs API
-- AWS S3
+To successfully deploy the template, execute the following steps in order:
 
-When deploying this template, the sequence of steps is important. Follow the steps below in order to get up and running.
+### 1. Initiate Deployment
 
-### Initiate Deployment
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation&env=SYNC_LABS_API_KEY,OPENAI_API_KEY,ELEVEN_LABS_API_KEY,NEXT_PUBLIC_S3_ACCESS_KEY,NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,NEXT_PUBLIC_S3_BUCKET_NAME,NEXT_PUBLIC_S3_REGION,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=API%20Keys%20and%20other%20environement%20variables%20required%20for%20this%20app%20to%20function%20correctly.&envLink=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%23vercel-deploy-button&project-name=translation-starter&repository-name=translation-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%2Ftree%2Fmain)
 
-#### Vercel Deploy Button
+Clicking the Deploy button will open up a browser tab with instructions on generating a new GitHub repository from this template and creating a corrseponding project in Supabase for `auth` and `storage`. Below are the steps you'll walk through:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=translation-starter&repository-name=translation-starter&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fnozma-knows%2Ftranslation%2Ftree%2Fmain)
+1. Create Git Repository
 
-The Vercel Deployment will create a new repository with this template on your GitHub account and guide you through the creation of a new Supabase project. The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase-v2) will set up the necessary Supabase environment variables and run the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to set up the Database schema on your account. You can inspect the created tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
+    - Under `Git Scope` select the account you'd like to deploy the repo to.
+    - Under `Repository Name` give your new repo a name.
 
-Should the automatic setup fail, please [create a Supabase account](https://app.supabase.com/projects), and a new project if needed. In your project, navigate to the [SQL editor](https://app.supabase.com/project/_/sql) and select the "Stripe Subscriptions" starter template from the Quick start section.
+2. Add Integrations
 
-### Configure Auth
+    The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase-v2) handles configuration of environment variables and initiates the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to construct your database schema. You can view the resulting tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
 
-In your Supabase project, navigate to [auth > URL configuration](https://app.supabase.com/project/_/auth/url-configuration) and set your main production URL (e.g. https://your-deployment-url.vercel.app) as the site url.
+    - Click `Add` in the Supabase integration and fill out the form that pops up.
 
-Next, in your Vercel deployment settings, add a new **Production** environment variable called `NEXT_PUBLIC_SITE_URL` and set it to the same URL. Make sure to deselect preview and development environments to make sure that preview branches and local development work correctly.
+3. Configure Project
 
-### Configure Stripe
+    Enter the environment variables required for this project. Below are links to documentation on how to obtain an API key for each of the required services to ensure full functionality.
 
-Next, we'll need to configure [Stripe](https://stripe.com/) to handle test payments. If you don't already have a Stripe account, create one now.
+    - [Sync Labs API Key](https://docs.synclabs.so/authentication)
+    - [Open AI](https://platform.openai.com/docs/api-reference/authentication)
+    - [Eleven Labs](https://elevenlabs.io/docs/api-reference/authentication)
+    - [Stripe](https://stripe.com/docs/api/authentication)
 
-For the following steps, make sure you have the ["Test Mode" toggle](https://stripe.com/docs/testing) switched on.
+### 2. Configure Auth
 
+You'll need to configure your Supabase project's site URL and Vercel's `NEXT_PUBLIC_SITE_URL` environment variable to secure and streamline authentication.
+
+1. In your Supabase project, navigate to `auth` > [URL configuration](https://app.supabase.com/project/_/auth/url-configuration) and enter your production URL (for example, https://your-deployment-url.vercel.app) as the site URL.
+
+2. In Vercel, under your project's deployment settings, create a new Production environment variable called `NEXT_PUBLIC_SITE_URL` and set it to your production URL. Make sure you uncheck the options for preview and development environments to maintain the correct operation for preview branches and local development.
+
+### 3. Configure Stripe
+
+Next, you'll need to configure [Stripe](https://stripe.com/) in order to handle test payments.
+
+#### Initial setup
+
+1. Create a [Stripe](https://stripe.com/) account if you don't have one yet
+2. Ensure you are in ["Test Mode"](https://stripe.com/docs/testing) by toggling the `Test Mode` switch at the top of the dashboard to the `ON` position.
+  
 #### Create a webhook
 
-We need to create a webhook in the `Developers` section of Stripe. Pictured in the architecture diagram above, this webhook is the piece that connects Stripe to your Vercel Serverless Functions.
+1. In Stripe's `Developers` section, navigate to the [Webhooks](https://dashboard.stripe.com/test/webhooks) tab and click `Add endpoint`
+2. Under `Endpoint URL` enter your deployment URL with `/api/webhooks` appended to the end (e.g., `https://your-deployment-url.vercel.app/api/webhooks`).
+3. Under `Select events to listen to` choose `Select events`, toggle on `Select all events` and then click `Add events`
+4. Scroll to the bottom of the form and select `Add endpoint`
+5. In the page that appears, under `Signing secret` click `reveal` and copy the secret.
+6. Add this `Signing secret` as the `STRIPE_WEBHOOK_SECRET` environment variable in your Vercel settings.
 
-1. Click the "Add Endpoint" button on the [test Endpoints page](https://dashboard.stripe.com/test/webhooks).
-1. Enter your production deployment URL followed by `/api/webhooks` for the endpoint URL. (e.g. `https://your-deployment-url.vercel.app/api/webhooks`)
-1. Click `Select events` under the `Select events to listen to` heading.
-1. Click `Select all events` in the `Select events to send` section.
-1. Copy `Signing secret` as we'll need that in the next step.
-1. In addition to the `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and the `STRIPE_SECRET_KEY` we've set earlier during deployment, we need to add the webhook secret as `STRIPE_WEBHOOK_SECRET` env var.
+#### Redeploy with Updated Environment Variables
 
-#### Redeploy with new env vars
+Redeploy your application in Vercel for the new environment variables to activate. Go to your `Vercel Dashboard`, find the `Deployments` section, and choose `Redeploy` from the overflow menu. Ensure "Use existing Build Cache" is not selected.
 
-For the newly set environment variables to take effect and everything to work together correctly, we need to redeploy our app in Vercel. In your Vercel Dashboard, navigate to deployments, click the overflow menu button and select "Redeploy" (do NOT enable the "Use existing Build Cache" option). Once Vercel has rebuilt and redeployed your app, you're ready to set up your products and prices.
+#### Create product(s)
 
-#### Create product and pricing information
+With the Stripe webhook setup, you can start creating your products in the [Stripe Dashboard](https://dashboard.stripe.com/test/products). Stripe Checkout supports billing a set amount at regular intervals. It does not support complex pricing structures like tiered pricing or per-seat billing.
 
-Your application's webhook listens for product updates on Stripe and automatically propagates them to your Supabase database. So with your webhook listener running, you can now create your product and pricing information in the [Stripe Dashboard](https://dashboard.stripe.com/test/products).
+#### Configure the customer portal
 
-Stripe Checkout currently supports pricing that bills a predefined amount at a specific interval. More complex plans (e.g., different pricing tiers or seats) are not yet supported.
+- Set up branding in the [Branding settings](https://dashboard.stripe.com/settings/branding)
+- Set up the customer portal in the [Customer Portal settings](https://dashboard.stripe.com/test/settings/billing/portal)
 
-For example, you can create business models with different pricing tiers, e.g.:
+## Running locally
 
-- Product 1: Starter
-  - Price 1: 10 USD per month
-  - Description: Perfect for individuals or small teams just starting.
-- Product 2: Creator
-  - Price 1: 20 USD per month
-  - Description: Ideal for content creators and freelancers looking for high-quality results.
-- Product 3: Developer
-  - Price 1: 40 USD per month
-  - Optimized for professional developers and large teams requiring top-notch quality.
+### 1. Clone your GitHub repository to your local machine 
 
-**Important:** Make sure that you've configured your Stripe webhook correctly and redeployed with all needed environment variables.
+### 2. Link your project using the `Vercel CLI`
 
-#### Configure the Stripe customer portal
-
-1. Set your custom branding in the [settings](https://dashboard.stripe.com/settings/branding)
-1. Configure the Customer Portal [settings](https://dashboard.stripe.com/test/settings/billing/portal)
-1. Toggle on "Allow customers to update their payment methods"
-1. Toggle on "Allow customers to update subscriptions"
-1. Toggle on "Allow customers to cancel subscriptions"
-1. Add the products and prices that you want
-1. Set up the required business information and links
-
-### You're all set!
-
-You're now ready to earn recurring revenue from your SaaS product! 🥳
-
-## Develop locally
-
-If you haven't already done so, clone your Github repository to your local machine.
-
-Next, use the [Vercel CLI](https://vercel.com/download) to link your project:
+In a terminal navigate to your project's root directory and enter the following command.
 
 ```bash
 vercel login
 vercel link
 ```
 
+### 3. Set up local environment variables
+
 ### Setting up the env vars locally
 
-Use the Vercel CLI to download the development env vars:
+In a terminal navigate to your project's root directory and enter the following command.
 
 ```bash
 vercel env pull .env.local
 ```
+This command will create a new `.env.local` file in your project folder.
 
-Running this command will create a new `.env.local` file in your project folder. For security purposes, you will need to set the `SUPABASE_SERVICE_ROLE_KEY` manually from your [Supabase dashboard](https://app.supabase.io/) (`Settings > API`).
+### 4. Test webhooks using the `Stripe CLI`
 
-### Use the Stripe CLI to test webhooks
+- Install the [Stripe CLI](https://stripe.com/docs/stripe-cli)
+- [Link](https://stripe.com/docs/stripe-cli#login-account) your Stripe account.
 
-[Install the Stripe CLI](https://stripe.com/docs/stripe-cli) and [link your Stripe account](https://stripe.com/docs/stripe-cli#login-account).
-
-Next, start local webhook forwarding:
+In a seperate terminal, run the below command to initiate local webhook forwarding
 
 ```bash
 stripe listen --forward-to=localhost:3000/api/webhooks
 ```
 
-Running this Stripe command will print a webhook secret (such as, `whsec_***`) to the console. Set `STRIPE_WEBHOOK_SECRET` to this value in your `.env.local` file.
+Running this Stripe command will print a webhook secret (`whsec_***`), to the console. Set `STRIPE_WEBHOOK_SECRET` to this value in your `.env.local` file.
 
-### Install dependencies and run the Next.js client
+### 5. Install dependencies and run the project
 
-In a separate terminal, run the following commands to install dependencies and start the development server:
+In a separate terminal, navigate to your project's root directory and run the following commands to install dependencies and start the dev server
 
 ```bash
 yarn
 yarn dev
 ```
 
-Note that webhook forwarding and the development server must be running concurrently in two separate terminals for the application to work correctly.
+### 6. You've done it!
 
-Finally, navigate to [http://localhost:3000](http://localhost:3000) in your browser to see the application rendered.
+Open your web browser and visit http://localhost:3000 to view your application.
 
-## Going live
+### How to Contribute
 
-### Archive testing products
+We embrace the collaborative spirit of the open-source community.
 
-Archive all test mode Stripe products before going live. Before creating your live mode products, make sure to follow the steps below to set up your live mode env vars and webhooks.
+To suggest enhancements or submit changes:
 
-### Configure production environment variables
+1. Fork the repository.
+2. Create a new branch from `dev` for your changes.
+3. Commit your updates and push to your fork.
+4. Submit a pull request back to the `dev` branch of the original repository.
 
-To run the project in live mode and process payments with Stripe, switch Stripe from "test mode" to "production mode." Your Stripe API keys will be different in production mode, and you will have to create a separate production mode webhook. Copy these values and paste them into Vercel, replacing the test mode values.
+Your contributions are highly appreciated!
 
-### Redeploy
+## Resources
 
-Afterward, you will need to rebuild your production deployment for the changes to take effect. Within your project Dashboard, navigate to the "Deployments" tab, select the most recent deployment, click the overflow menu button (next to the "Visit" button) and select "Redeploy" (do NOT enable the "Use existing Build Cache" option).
+- Sync Labs [Slack Community](https://syncbetatesters.slack.com/ssb/redirect#/shared-invite/email)
+- Sync Labs [Docs](https://docs.synclabs.so/)
 
-To verify you are running in production mode, test checking out with the [Stripe test card](https://stripe.com/docs/testing). The test card should not work.
+## License
 
-## A note on reliability
-
-This template mirrors completed Stripe transactions to the Supabase database. This means that if the Supabase database is unavailable, the Stripe transaction will still succeed, but the Supabase database will not be updated, and the application will pass an error code back to Stripe. [By default](https://stripe.com/docs/webhooks/best-practices), Stripe will retry sending its response to the webhook for up to three days, or until the database update succeeds. This means that the Stripe transaction will eventually be reflected in the Supabase database as long as the database comes back online within three days. You may want to implement a process to automatically reconcile the Supabase database with Stripe in case of a prolonged outage.
+Translation AI is released under the [MIT License](https://choosealicense.com/licenses/mit/).
